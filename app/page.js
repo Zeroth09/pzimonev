@@ -76,14 +76,23 @@ export default function Home() {
     setPanelSaving(true);
     try {
       const res = await fetch('/api/kegiatan/' + id, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fields) });
-      if (res.ok) { showToast('Berhasil diupdate'); fetchData(); }
+      if (res.ok) {
+        const updated = await res.json();
+        setAllData(prev => prev.map(d => d.id === id ? { ...d, ...updated } : d));
+        setPanel(prev => prev ? { ...prev, data: { ...prev.data, ...updated } } : null);
+        showToast('Berhasil diupdate');
+      }
     } catch { showToast('Gagal update'); }
     setPanelSaving(false);
   }
 
   async function handleDelete(id) {
     const res = await fetch('/api/kegiatan/' + id, { method: 'DELETE' });
-    if (res.ok) { showToast('Dihapus'); setPanel(null); fetchData(); }
+    if (res.ok) {
+      setAllData(prev => prev.filter(d => d.id !== id));
+      setPanel(null);
+      showToast('Dihapus');
+    }
   }
 
   return (
