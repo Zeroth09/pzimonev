@@ -2,6 +2,7 @@
  * Seed script - Run locally to populate Turso database from CSV
  * Usage: TURSO_DATABASE_URL=... TURSO_AUTH_TOKEN=... node scripts/seed.js
  */
+import 'dotenv/config';
 import { createClient } from '@libsql/client';
 import { readFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
