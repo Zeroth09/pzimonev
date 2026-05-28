@@ -25,6 +25,7 @@ export default function Home() {
   const [toast, setToast] = useState('');
   const [search, setSearch] = useState('');
   const [selectedStatus, setSelectedStatus] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -99,8 +100,12 @@ export default function Home() {
 
   return (
     <div className="app-layout">
-      <aside className="sidebar">
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <aside className={'sidebar' + (sidebarOpen ? ' open' : '')}>
         <div className="sidebar-brand">
+          <button className="sidebar-close" onClick={() => setSidebarOpen(false)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
           <div className="brand-icon">ZI</div>
           <div><div className="brand-title">Monev ZI</div><div className="brand-sub">RSJ Mutiara Sukma</div></div>
         </div>
@@ -147,6 +152,9 @@ export default function Home() {
 
       <main className="main-area">
         <div className="topbar">
+          <button className="hamburger-btn" onClick={() => setSidebarOpen(true)}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
           <div className="month-nav">
             <button className="month-arrow" onClick={() => setSelectedMonth(function(m) { return m === 0 ? 11 : m - 1; })}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6"/></svg>
@@ -204,6 +212,21 @@ export default function Home() {
         ) : (
           <ListView data={filtered} onRowClick={function(d) { setPanel({mode: 'detail', data: d}); }} />
         )}
+
+        <div className="mobile-bottom-nav">
+          <button className={'mobile-nav-btn' + (view === 'board' ? ' active' : '')} onClick={() => setView('board')}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span>Board</span>
+          </button>
+          <button className={'mobile-nav-btn' + (view === 'list' ? ' active' : '')} onClick={() => setView('list')}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            <span>List</span>
+          </button>
+          <button className="mobile-nav-btn" onClick={() => setSidebarOpen(true)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Filter</span>
+          </button>
+        </div>
       </main>
 
       {panel && (
