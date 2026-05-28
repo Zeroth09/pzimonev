@@ -256,6 +256,10 @@ body {
 .pill-tertunda { background: #f3f4f6; }
 .pill-tertunda .pill-num { color: #6b7280; }
 
+.summary-pill.clickable { cursor: pointer; transition: all var(--transition); }
+.summary-pill.clickable:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+.summary-pill.clickable.active { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,.12); outline: 2px solid var(--primary); outline-offset: 2px; }
+
 .month-progress-bar {
   flex: 1;
   height: 20px;

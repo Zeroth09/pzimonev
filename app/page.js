@@ -24,6 +24,7 @@ export default function Home() {
   const [panelSaving, setPanelSaving] = useState(false);
   const [toast, setToast] = useState('');
   const [search, setSearch] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -46,6 +47,7 @@ export default function Home() {
   const filtered = allData.filter(d => {
     if (d.bulan !== currentBulan) return false;
     if (selectedArea && d.area_zi !== selectedArea) return false;
+    if (selectedStatus && d.status !== selectedStatus) return false;
     if (search) {
       const hay = [d.id, d.kegiatan, d.sub_kegiatan, d.capaian, d.kendala].join(' ').toLowerCase();
       if (!hay.includes(search.toLowerCase())) return false;
@@ -178,11 +180,11 @@ export default function Home() {
         </div>
 
         <div className="month-summary">
-          <div className="summary-pill"><span className="pill-num">{monthStats.total}</span><span className="pill-label">Total</span></div>
-          <div className="summary-pill pill-selesai"><span className="pill-num">{monthStats.selesai}</span><span className="pill-label">Selesai</span></div>
-          <div className="summary-pill pill-proses"><span className="pill-num">{monthStats.proses}</span><span className="pill-label">Proses</span></div>
-          <div className="summary-pill pill-belum"><span className="pill-num">{monthStats.belum}</span><span className="pill-label">Belum</span></div>
-          <div className="summary-pill pill-tertunda"><span className="pill-num">{monthStats.tertunda}</span><span className="pill-label">Tertunda</span></div>
+          <div className={'summary-pill clickable' + (selectedStatus === null ? ' active' : '')} onClick={() => setSelectedStatus(null)}><span className="pill-num">{monthStats.total}</span><span className="pill-label">Total</span></div>
+          <div className={'summary-pill pill-selesai clickable' + (selectedStatus === 'Selesai' ? ' active' : '')} onClick={() => setSelectedStatus(selectedStatus === 'Selesai' ? null : 'Selesai')}><span className="pill-num">{monthStats.selesai}</span><span className="pill-label">Selesai</span></div>
+          <div className={'summary-pill pill-proses clickable' + (selectedStatus === 'Dalam Proses' ? ' active' : '')} onClick={() => setSelectedStatus(selectedStatus === 'Dalam Proses' ? null : 'Dalam Proses')}><span className="pill-num">{monthStats.proses}</span><span className="pill-label">Proses</span></div>
+          <div className={'summary-pill pill-belum clickable' + (selectedStatus === 'Belum Mulai' ? ' active' : '')} onClick={() => setSelectedStatus(selectedStatus === 'Belum Mulai' ? null : 'Belum Mulai')}><span className="pill-num">{monthStats.belum}</span><span className="pill-label">Belum</span></div>
+          <div className={'summary-pill pill-tertunda clickable' + (selectedStatus === 'Tertunda' ? ' active' : '')} onClick={() => setSelectedStatus(selectedStatus === 'Tertunda' ? null : 'Tertunda')}><span className="pill-num">{monthStats.tertunda}</span><span className="pill-label">Tertunda</span></div>
           <div className="month-progress-bar">
             <div className="month-progress-fill" style={{width: monthPct + '%'}} />
             <span className="month-progress-text">{monthPct}% selesai</span>
